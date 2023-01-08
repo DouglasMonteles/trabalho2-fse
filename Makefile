@@ -1,25 +1,28 @@
-CC = gcc
-LDFLAGS =
-BLDDIR = .
-INCDIR = $(BLDDIR)/inc
-SRCDIR = $(BLDDIR)/src
-OBJDIR = $(BLDDIR)/obj
-CFLAGS = -c -Wall -I$(INCDIR)
-SRC = $(wildcard $(SRCDIR)/*.c)
-OBJ = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
-EXE = bin/bin
+# Executavel
+BINFOLDER := bin/
+# .hpp
+INCFOLDER := inc/
+# .cpp
+SRCFOLDER := src/
+# .o
+OBJFOLDER := obj/
+CC := gcc
+CFLAGS := -std=c99
+LINKFLAGS := -lrt -lbcm2835 -lwiringPi -pthread
+SRCFILES := $(wildcard src/*.c)
 
-all: clean $(EXE) 
-    
-$(EXE): $(OBJ) 
-	$(CC) $(LDFLAGS) $(OBJDIR)/*.o -o $@ 
+all: $(SRCFILES:src/%.c=obj/%.o)
+	$(CC) $(CFLAGS) obj/*.o -o bin/main $(LINKFLAGS)
 
-$(OBJDIR)/%.o : $(SRCDIR)/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $< -o $@
-	
-run: 
-	./bin/bin
+obj/%.o: src/%.c
+	$(CC) $(CFLAGS) -c $< -o $@ -I./inc $(LINKFLAGS)
 
+run: bin/main
+	bin/main
+
+.PHONY: clean
 clean:
-	-rm -f $(OBJDIR)/*.o $(EXE)
+	rm -rf obj/*
+	rm -rf bin/*
+	touch obj/.gitkeep
+	touch bin/.gitkeep
