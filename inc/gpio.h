@@ -8,6 +8,6 @@
 short pin_status(int pin);
 void turn_on_or_off_output(int output);
 void handle_gpio_interrupt();
-void config_gpio_inputs();
+void config_gpio_outputs();
 
 #endif

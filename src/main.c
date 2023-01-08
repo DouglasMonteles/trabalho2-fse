@@ -4,18 +4,23 @@
 
 #include "main.h"
 #include "gpio.h"
+#include "menu.h"
 
 int main(int argc, char **argv) {
+  short option;
   signal(SIGINT, handle_interrupt);
+
   init_application_configs();
 
-  turn_on_or_off_output(RESISTOR_GPIO);
+  while ((option = menu()) != EXIT) {
+    handle_menu_option(option);
+  }
 
   return 0;
 }
 
 void init_application_configs() {
-  config_gpio_inputs();
+  config_gpio_outputs();
 }
 
 void handle_interrupt(int signal) {

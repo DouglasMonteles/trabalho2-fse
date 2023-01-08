@@ -25,9 +25,9 @@ void handle_gpio_interrupt() {
   bcm2835_close();
 }
 
-void config_gpio_inputs() {
+void config_gpio_outputs() {
   if (!bcm2835_init()) {
-    printf("Erro ao configurar os inputs do gpio\n");
+    printf("Erro ao configurar os outputs do gpio\n");
     exit(1);
   }
 
