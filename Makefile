@@ -26,3 +26,8 @@ clean:
 	rm -rf bin/*
 	touch obj/.gitkeep
 	touch bin/.gitkeep
+
+build:
+	make clean
+	make 
+	make run
