@@ -22,6 +22,10 @@ void turn_on_or_off_output(int output) {
 }
 
 void handle_gpio_interrupt() {
+  // shutdown the resistor and fan
+  bcm2835_gpio_write(RESISTOR_GPIO, LOW);
+  bcm2835_gpio_write(FAN_GPIO, LOW);
+  
   bcm2835_close();
 }
 

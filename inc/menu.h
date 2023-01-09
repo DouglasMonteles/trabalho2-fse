@@ -8,7 +8,7 @@
 static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
   "[1] - Ligar/Desligar Resistor",
   "[2] - Ligar/Desligar Ventoinha",
-  "[3] - Ligar/Desligar Ventoinha",
+  "[3] - Sensor de Temperatura",
   "[4] - Sair",
 };
 
