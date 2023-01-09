@@ -2,6 +2,7 @@
 
 #include "menu.h"
 #include "gpio.h"
+#include "uart_modbus.h"
 
 short menu() {
   short selected_option = 0;
@@ -24,6 +25,13 @@ void handle_menu_option(short option) {
     turn_on_or_off_output(RESISTOR_GPIO);
     break;
   
+  case 4: {
+    float intern_temperature = request_float_intern_temperature_message();
+    printf("Temperatura interna recebida: %f\n", intern_temperature);
+    
+    break;
+  }
+
   default:
     break;
   }
