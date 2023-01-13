@@ -13,6 +13,8 @@
 #define FUNCTION_REQUEST_CODE 0x23                            // function code
 #define FUNCTION_SEND_CODE 0x16                               // function code
 #define REQUEST_FLOAT_INTERN_TEMPERATURE_DATA_CODE 0xC1       // data type
+#define REQUEST_FLOAT_REFERENCE_TEMPERATURE_DATA_CODE 0xC2    // data type
+#define REQUEST_READ_USER_COMMANDS_DATA_CODE 0xC3             // data type
 
 #define REQUEST_INT_DATA_CODE 0xA1        // data type
 #define REQUEST_FLOAT_DATA_CODE 0xA2      // data type
@@ -25,6 +27,8 @@ int init_uart();
 void config_uart(int uart0_filestream);
 
 float request_float_intern_temperature_message(void);
+float request_float_reference_temperature_message(void);
+int read_user_commands(void);
 void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out);
 
 #endif

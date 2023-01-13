@@ -32,6 +32,20 @@ void handle_menu_option(short option) {
     break;
   }
 
+  case 5: {
+    float reference_temperature = request_float_reference_temperature_message();
+    printf("Temperatura de referencia recebida: %f\n", reference_temperature);
+    
+    break;
+  }
+
+  case 6: {
+    int command = read_user_commands();
+    printf("Le comandos do usuario: %d\n", command);
+    
+    break;
+  }
+
   default:
     break;
   }
