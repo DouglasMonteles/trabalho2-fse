@@ -1,8 +1,8 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#define MENU_OPTIONS 7
-#define MENU_LENGTH_OPTIONS 50
+#define MENU_OPTIONS 10
+#define MENU_LENGTH_OPTIONS 100
 #define EXIT MENU_OPTIONS
 
 static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
@@ -12,7 +12,10 @@ static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
   "[4] - Solicita temperatura interna do forno",
   "[5] - Solicita temperatura de referencia do forno",
   "[6] - Le comandos do usuario",
-  "[7] - Sair",
+  "[7] - Enviar sinal de controle",
+  "[8] - Enviar sinal de referencia",
+  "[9] - Enviar estado do sistema [1] - Ligado / [0] - Desligado",
+  "[10] - Sair",
 };
 
 short menu();

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 
 #include "menu.h"
 #include "gpio.h"
@@ -43,6 +44,24 @@ void handle_menu_option(short option) {
     int command = read_user_commands();
     printf("Le comandos do usuario: %d\n", command);
     
+    break;
+  }
+
+  case 7: {
+    int controller_sign = 13;
+    send_controller_sign(controller_sign);
+    break;
+  }
+
+  case 8: {
+    float reference_sign = 2;
+    send_reference_sign(reference_sign);
+    break;
+  }
+
+  case 9: {
+    char state = 1;
+    send_system_state(state);
     break;
   }
 
