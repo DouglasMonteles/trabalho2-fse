@@ -8,10 +8,14 @@
 short menu() {
   short selected_option = 0;
 
+  printf("\n\n==================== MENU DE CONTROLE =========================\n");
+
   for (int i = 0; i < MENU_OPTIONS; i++) {
     printf(menu_options[i]);
     printf("\n");
   }
+
+  printf("==================== =============== =========================\n\n");
 
   printf("\nInforme o numero da opcao desejada:\n");
   scanf("%d", &selected_option);
@@ -47,6 +51,8 @@ void handle_menu_option(short option) {
   case 6: {
     int command = read_user_commands();
     printf("Le comandos do usuario: %d\n", command);
+
+    handle_user_command(command);
     
     break;
   }
@@ -113,4 +119,31 @@ void handle_menu_option(short option) {
   }
 
   printf("\n\n");
+}
+
+void handle_user_command(int command) {
+  switch (command) {
+    case 161:
+      printf("Liga o Forno\n");
+      break;
+
+    case 162:
+      printf("Desliga o Forno\n");
+      break;
+
+    case 163:
+      printf("Inicia aquecimento\n");
+      break;
+
+    case 164:
+      printf("Cancela processo\n");
+      break;
+
+    case 165:
+      printf("Menu : alterna entre o modo de Temperatura de Referência e Curva de Temperatura\n");
+      break;
+
+    default:
+      printf("UNKNOWN\n");
+  }
 }

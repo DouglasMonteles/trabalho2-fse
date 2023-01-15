@@ -23,5 +23,6 @@ static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
 
 short menu();
 void handle_menu_option(short option);
+void handle_user_command(int command);
 
 #endif
