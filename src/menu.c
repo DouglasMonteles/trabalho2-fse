@@ -60,8 +60,24 @@ void handle_menu_option(short option) {
   }
 
   case 9: {
-    char state = 1;
-    send_system_state(state);
+    char state = 0;
+
+    printf("Informe o valor do estado do sistema: [1] - Ligado | [0] - Desligado\n");
+    scanf(" %d", &state);
+
+    int system_state = send_system_state(state);
+    printf("O sistema esta: %s\n", (system_state == 0) ? "desligado" : "ligado");
+    break;
+  }
+
+  case 10: {
+    char controller_mode = 0;
+
+    printf("Informe o modo de controle da temperatura de referencia: [0] - Dashboard | [1] - Curva/Terminal\n");
+    scanf(" %d", &controller_mode);
+    
+    int mode = send_controller_mode(controller_mode);
+    printf("Modo de controle: %s\n", (mode == 0) ? "Dashboard" : "Curva/Terminal");
     break;
   }
 

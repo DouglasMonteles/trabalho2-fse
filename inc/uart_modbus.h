@@ -19,7 +19,8 @@
 
 #define SEND_CONTROLLER_SIGN_DATA_CODE 0xD1                   // data type
 #define SEND_REFERENCE_SIGN_DATA_CODE 0xD2                    // data type
-#define SEND_SYSTEM_STATE_DATA_CODE 0xD3                    // data type
+#define SEND_SYSTEM_STATE_DATA_CODE 0xD3                      // data type
+#define SEND_CONTROLLER_MODE_DATA_CODE 0xD4                   // data type
 
 #define REQUEST_INT_DATA_CODE 0xA1        // data type
 #define REQUEST_FLOAT_DATA_CODE 0xA2      // data type
@@ -36,7 +37,8 @@ float request_float_reference_temperature_message(void);
 int read_user_commands(void);
 void send_controller_sign(int controller_sign);
 void send_reference_sign(float reference_sign);
-void send_system_state(char state);
+int send_system_state(char state);
+int send_controller_mode(char mode);
 void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out);
 
 #endif

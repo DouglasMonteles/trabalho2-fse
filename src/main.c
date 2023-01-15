@@ -24,6 +24,10 @@ void init_application_configs() {
 }
 
 void handle_interrupt(int signal) {
+  printf("Interrompendo o programa e finalizando os processos abertos...\n");
+  
   handle_gpio_interrupt();
+
+  printf("Todos os processos utilizados pelo programa foram finalizados com sucesso\n");
   exit(0);
 }
