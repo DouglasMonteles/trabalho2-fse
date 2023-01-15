@@ -373,6 +373,54 @@ int send_working_status(char status) {
   return working_status;
 }
 
+float send_room_temperature(float room_temperature) {
+  float temperature = 0.f;
+  int uart0_filestream = init_uart();
+
+  unsigned char tx_buffer[20];
+  unsigned char *p_tx_buffer;
+
+  // Send controller sign (int)
+  p_tx_buffer = &tx_buffer[0];
+  *p_tx_buffer++ = DEVICE_ADDRESS_CODE;
+  *p_tx_buffer++ = FUNCTION_SEND_CODE;
+  *p_tx_buffer++ = SEND_ROOM_TEMPERATURE_DATA_CODE;
+
+  // Last four digits of the registration number
+  *p_tx_buffer++ = 2;
+  *p_tx_buffer++ = 2;
+  *p_tx_buffer++ = 0;
+  *p_tx_buffer++ = 0;
+
+  memcpy(p_tx_buffer, &room_temperature, sizeof(room_temperature));
+  p_tx_buffer+=sizeof(room_temperature);
+
+  short crc_value = calcula_CRC(tx_buffer, CALC_CRC_SEND_SIZE);
+  memcpy(p_tx_buffer, &crc_value, sizeof(crc_value));
+  
+  p_tx_buffer += sizeof(crc_value);
+
+  printf("Buffers de memória criados! \n");
+
+  if (uart0_filestream != -1) {
+    printf("Escrevendo caracteres na UART ...");
+    int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
+    
+    if (count < 0) {
+      printf("UART TX error\n");
+    } else {
+      printf("escrito.\n");
+    }
+  }
+
+  sleep(1);
+
+  check_for_any_rx_bytes(uart0_filestream, FLOAT, &temperature);
+  close(uart0_filestream);
+
+  return temperature;
+}
+
 void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
   //----- CHECK FOR ANY RX BYTES -----
   if (uart0_filestream != -1) {

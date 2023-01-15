@@ -92,6 +92,18 @@ void handle_menu_option(short option) {
     break;
   }
 
+  case 12: {
+    float room_temperature = 0.f;
+    
+    printf("Informe a temperatura ambiente: ");
+    scanf(" %f", &room_temperature);
+
+    float temperature = send_room_temperature(room_temperature);
+
+    printf("Temperatura ambiente: %f\n", room_temperature);
+    break;
+  }
+
   default:
     break;
   }
