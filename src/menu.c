@@ -81,6 +81,17 @@ void handle_menu_option(short option) {
     break;
   }
 
+  case 11: {
+    char working_status = 0;
+
+    printf("Informe o estado de funcionamento: [0] - Parado | [1] - Funcionando\n");
+    scanf(" %d", &working_status);
+    
+    int status = send_working_status(working_status);
+    printf("Estado de funcionamento: %s\n", (status == 0) ? "Parado" : "Funcionando");
+    break;
+  }
+
   default:
     break;
   }

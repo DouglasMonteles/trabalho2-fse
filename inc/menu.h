@@ -1,7 +1,7 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#define MENU_OPTIONS 11
+#define MENU_OPTIONS 12
 #define MENU_LENGTH_OPTIONS 200
 #define EXIT MENU_OPTIONS
 
@@ -15,8 +15,9 @@ static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
   "[7] - Enviar sinal de controle",
   "[8] - Enviar sinal de referencia",
   "[9] - Enviar estado do sistema: [1] - Ligado | [0] - Desligado",
-  "[10] - Enviar modo de controle da temperatura de referencia: [0] - Dashboard | [1] - Curva/Terminal)",
-  "[11] - Sair",
+  "[10] - Enviar modo de controle da temperatura de referencia: [0] - Dashboard | [1] - Curva/Terminal",
+  "[11] - Enviar o estado de funcionamento: [0] - Parado | [1] - Funcionando",
+  "[12] - Sair",
 };
 
 short menu();
