@@ -13,7 +13,7 @@ short menu() {
     printf("\n");
   }
 
-  printf("Informe o numero da opcao desejada:\n");
+  printf("\nInforme o numero da opcao desejada:\n");
   scanf("%d", &selected_option);
 
   printf("Voce selecionou a opcao: %s\n\n", menu_options[selected_option-1]);
@@ -24,6 +24,10 @@ void handle_menu_option(short option) {
   switch (option) {
   case 1: 
     turn_on_or_off_output(RESISTOR_GPIO);
+    break;
+
+  case 2: 
+    turn_on_or_off_output(FAN_GPIO);
     break;
   
   case 4: {
