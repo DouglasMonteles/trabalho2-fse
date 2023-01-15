@@ -10,7 +10,7 @@ short pin_status(int pin) {
 }
 
 void turn_on_or_off_output(int output) {
-  printf("O pin gpio: %d estava: %d\n", output, pin_status(output));
+  printf("O(A) %s estava: %s\n", get_gpio_name(output), pin_status(output) == LOW ? "DESLIGADO(A)" : "LIGADO(a)");
 
   if (pin_status(output) == HIGH) {
     bcm2835_gpio_write(output, LOW);
@@ -18,7 +18,20 @@ void turn_on_or_off_output(int output) {
     bcm2835_gpio_write(output, HIGH);
   }
   
-  printf("E agora o pin gpio: %d esta: %d\n", output, pin_status(output));
+  printf("O(A) %s agora esta: %s\n", get_gpio_name(output), pin_status(output) == LOW ? "DESLIGADO(A)" : "LIGADO(A)");
+}
+
+char* get_gpio_name(int pin) {
+  switch (pin) {
+    case RESISTOR_GPIO:
+      return "RESISTOR";
+    
+    case FAN_GPIO:
+      return "VENTOINHA";
+
+    default:
+      return "UNKNOWN";
+  }
 }
 
 void handle_gpio_interrupt() {
