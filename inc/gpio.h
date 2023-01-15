@@ -2,7 +2,7 @@
 #define _GPIO_H_
 
 #define RESISTOR_GPIO 23
-#define FAN_GPIO 24
+#define COOLER_GPIO 24
 #define TEMPERATURE_SENSOR_GPIO 4
 
 short pin_status(int pin);

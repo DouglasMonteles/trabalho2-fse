@@ -31,7 +31,7 @@ void handle_menu_option(short option) {
     break;
 
   case 2: 
-    turn_on_or_off_output(FAN_GPIO);
+    turn_on_or_off_output(COOLER_GPIO);
     break;
   
   case 4: {

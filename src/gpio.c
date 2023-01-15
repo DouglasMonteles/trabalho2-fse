@@ -26,7 +26,7 @@ char* get_gpio_name(int pin) {
     case RESISTOR_GPIO:
       return "RESISTOR";
     
-    case FAN_GPIO:
+    case COOLER_GPIO:
       return "VENTOINHA";
 
     default:
@@ -37,7 +37,7 @@ char* get_gpio_name(int pin) {
 void handle_gpio_interrupt() {
   // shutdown the resistor and fan
   bcm2835_gpio_write(RESISTOR_GPIO, LOW);
-  bcm2835_gpio_write(FAN_GPIO, LOW);
+  bcm2835_gpio_write(COOLER_GPIO, LOW);
   
   bcm2835_close();
 }
@@ -49,6 +49,6 @@ void config_gpio_outputs() {
   }
 
   bcm2835_gpio_fsel(RESISTOR_GPIO, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(FAN_GPIO, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(COOLER_GPIO, BCM2835_GPIO_FSEL_OUTP);
   bcm2835_gpio_fsel(TEMPERATURE_SENSOR_GPIO, BCM2835_GPIO_FSEL_OUTP);
 }
