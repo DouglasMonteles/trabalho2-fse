@@ -1,7 +1,7 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#define MENU_OPTIONS 13
+#define MENU_OPTIONS 14
 #define MENU_LENGTH_OPTIONS 200
 #define EXIT MENU_OPTIONS
 
@@ -18,7 +18,8 @@ static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
   "[10] - Enviar modo de controle da temperatura de referencia: [0] - Dashboard | [1] - Curva/Terminal",
   "[11] - Enviar o estado de funcionamento: [0] - Parado | [1] - Funcionando",
   "[12] - Enviar temperatura ambiente",
-  "[13] - Sair",
+  "[13] - Obter temperatura (BME280)",
+  "[14] - Sair",
 };
 
 short menu();

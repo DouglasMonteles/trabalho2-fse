@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "menu.h"
 #include "gpio.h"
 #include "uart_modbus.h"
+#include "bme280_temperature.h"
 
 short menu() {
   short selected_option = 0;
@@ -111,6 +113,21 @@ void handle_menu_option(short option) {
     float temperature = send_room_temperature(room_temperature);
 
     printf("Temperatura ambiente: %f\n", room_temperature);
+    break;
+  }
+
+  case 13: {
+    init_bme280();
+    double temperature;
+    int result = get_temperature(&temperature);
+
+    if (result == BME280_RESPONSE_SUCCESS) {
+      printf("Temperatura: %lf\n", temperature);
+    } else {
+      printf("Erro na leitura do bme280\n");
+      exit(1);
+    }
+
     break;
   }
 
