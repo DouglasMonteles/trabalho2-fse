@@ -7,6 +7,17 @@
 #include "uart_modbus.h"
 #include "bme280_temperature.h"
 
+short handle_initial_menu() {
+  short option;
+
+  printf("Escolha o modo de operacao da aplicacao:\n");
+  printf("[1] - Modo Terminal\n");
+  printf("[2] - Modo UART\n");
+
+  scanf(" %hd", &option);
+  return option;
+}
+
 short menu() {
   short selected_option = 0;
 

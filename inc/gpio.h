@@ -1,6 +1,9 @@
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
+#define LOW 0
+#define HIGH 1
+
 #define RESISTOR_GPIO 23
 #define COOLER_GPIO 24
 #define TEMPERATURE_SENSOR_GPIO 4

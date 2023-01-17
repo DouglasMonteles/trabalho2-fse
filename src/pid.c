@@ -13,6 +13,32 @@ double erro_total, erro_anterior = 0.0;
 int sinal_de_controle_MAX = 100.0;
 int sinal_de_controle_MIN = -100.0;
 
+void config_pid() {
+  short option;
+
+  Kp = Kp_DEFAULT;
+  Ki = Ki_DEFAULT;
+  Kd = Ki_DEFAULT;  
+
+  printf("\n\nComo deseja inicializar as constantes do PID?\n");
+  printf("[1] - Usar valores padrao (Kp=%lf), (Ki=%lf), (Kd=%lf) \n", Kp, Ki, Kd);
+  printf("[2] - Informar os valores Kp, Ki e Kd manualmente\n\n");
+
+  printf("Informe o numero da opcao desejada:\n");
+
+  pid_configura_constantes(Kp, Ki, Kd); // default values
+
+  scanf(" %hd", &option);
+
+  if (option == 2) {
+    scanf(" %lf %lf %lf", &Kp, &Ki, &Kd);
+    // setted values
+    pid_configura_constantes(Kp, Ki, Kd);
+  } else if (option < 0 || option >= 3) {
+    printf("Informe uma opcao valida!\n");
+  }
+}
+
 void pid_configura_constantes(double Kp_, double Ki_, double Kd_) {
   Kp = Kp_;
   Ki = Ki_;

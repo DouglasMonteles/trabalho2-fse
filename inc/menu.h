@@ -22,6 +22,7 @@ static const unsigned char menu_options[MENU_OPTIONS][MENU_LENGTH_OPTIONS] = {
   "[14] - Sair",
 };
 
+short handle_initial_menu();
 short menu();
 void handle_menu_option(short option);
 void handle_user_command(int command);
