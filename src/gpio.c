@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <bcm2835.h>
+#include <wiringPi.h>
+#include <softPwm.h>
 
 #include "gpio.h"
 
@@ -35,11 +37,28 @@ char* get_gpio_name(int pin) {
 }
 
 void handle_gpio_interrupt() {
-  // shutdown the resistor and fan
+  // shutdown the resistor and cooler
+  softPwmWrite(RESISTOR_GPIO, 0);
+  softPwmWrite(COOLER_GPIO, 0);
   bcm2835_gpio_write(RESISTOR_GPIO, LOW);
   bcm2835_gpio_write(COOLER_GPIO, LOW);
   
   bcm2835_close();
+}
+
+void handle_temperature_power(double temp_power) {
+  if (temp_power < 0) {
+    temp_power *= -1;
+    
+    if(temp_power < 40) 
+      temp_power = 40;
+    
+    softPwmWrite(COOLER_GPIO, temp_power);
+    softPwmWrite(RESISTOR_GPIO, 0);
+  } else {
+    softPwmWrite(RESISTOR_GPIO, temp_power);
+    softPwmWrite(COOLER_GPIO, 0);
+  }
 }
 
 void config_gpio_outputs() {
@@ -48,7 +67,10 @@ void config_gpio_outputs() {
     exit(1);
   }
 
+  softPwmCreate(RESISTOR_GPIO, 1, 100);
+  softPwmCreate(COOLER_GPIO, 1, 100);
+
   bcm2835_gpio_fsel(RESISTOR_GPIO, BCM2835_GPIO_FSEL_OUTP);
   bcm2835_gpio_fsel(COOLER_GPIO, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(TEMPERATURE_SENSOR_GPIO, BCM2835_GPIO_FSEL_OUTP);
+  // bcm2835_gpio_fsel(TEMPERATURE_SENSOR_GPIO, BCM2835_GPIO_FSEL_OUTP);
 }
