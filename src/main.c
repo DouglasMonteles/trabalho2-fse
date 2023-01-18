@@ -66,12 +66,11 @@ void handle_terminal_process(double temperature) {
     printf("TI: %.2f TE: %.2f TR: %.2f\n", internal_temperature, external_temperature, temperature);
 
     handle_temperature_power(power);
+
+    sleep(1); // 1 seg
     user_command = read_user_commands();
-
-    usleep(400000); // 4 seg
-  } while (user_command ==  0);
-
-  handle_user_command(user_command);
+    handle_user_command(user_command);
+  } while (user_command != 162);
 }
 
 int main(int argc, char **argv) {
@@ -90,10 +89,10 @@ int main(int argc, char **argv) {
       printf("Informe o valor da temperatura que deseja que o forno alcance:\n");
       scanf("%lf", &temperature);
 
-      send_system_state(1);       // liga / desliga o sistema
-      send_working_status(1);     // funcionando / parado
-      send_controller_mode(1);    // Controle via dashboard ou curva / terminal
+      // send_system_state(1);       // liga / desliga o sistema
+      // send_working_status(1);     // funcionando / parado
 
+      send_controller_mode(1);    // Controle via curva / terminal
       handle_terminal_process(temperature);
     }
   } while (option == 1 || option == 2);
@@ -112,6 +111,11 @@ void init_application_configs() {
 
   // Config Kp, Ki and Kd constants
   config_pid();
+
+  // Reset dashboard values
+  send_system_state(0);       // liga / desliga o sistema
+  send_working_status(0);     // liga / desliga
+  send_controller_mode(0);    // Controle via dashboard ou curva / terminal
 }
 
 void handle_interrupt(int signal) {

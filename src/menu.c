@@ -150,25 +150,37 @@ void handle_menu_option(short option) {
 }
 
 void handle_user_command(int command) {
+  printf("Comando: %d\n", command);
+  
   switch (command) {
     case 161:
       printf("Liga o Forno\n");
+      send_system_state(1);
+      printf("Forno LIGADO\n\n");
       break;
 
     case 162:
       printf("Desliga o Forno\n");
+      send_system_state(0);
+      printf("Forno DESLIGADO\n\n");
       break;
 
     case 163:
       printf("Inicia aquecimento\n");
+      send_working_status(1);
+      
+      printf("Aquecimento INICIADO\n\n");
       break;
 
     case 164:
       printf("Cancela processo\n");
+      send_working_status(0);
+      printf("Aquecimento CANCELADO\n\n");
       break;
 
     case 165:
       printf("Menu : alterna entre o modo de Temperatura de Referência e Curva de Temperatura\n");
+      handle_menu_option(10);
       break;
 
     default:
