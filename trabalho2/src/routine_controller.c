@@ -14,6 +14,10 @@ void handle_terminal_process(double temperature) {
 
   // Atualizando a referencia do PID
   pid_atualiza_referencia(temperature);
+  send_reference_sign(temperature);
+
+  send_system_state(1);
+  send_working_status(1);
 
   do {
     handle_potentiometer_process();
