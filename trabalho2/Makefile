@@ -8,7 +8,7 @@ SRCFOLDER := src/
 OBJFOLDER := obj/
 CC := gcc
 CFLAGS := -std=c99
-LINKFLAGS := -lrt -lbcm2835 -lwiringPi -pthread
+LINKFLAGS := -lrt -lwiringPi -pthread
 SRCFILES := $(wildcard src/*.c)
 
 all: $(SRCFILES:src/%.c=obj/%.o)

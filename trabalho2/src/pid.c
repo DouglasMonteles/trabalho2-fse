@@ -18,10 +18,10 @@ void config_pid() {
 
   Kp = Kp_DEFAULT;
   Ki = Ki_DEFAULT;
-  Kd = Ki_DEFAULT;  
+  Kd = Kd_DEFAULT;  
 
   printf("\n\nComo deseja inicializar as constantes do PID?\n");
-  printf("[1] - Usar valores padrao (Kp=%lf), (Ki=%lf), (Kd=%lf) \n", Kp, Ki, Kd);
+  printf("[1] - Usar valores padrao (Kp=%.2lf), (Ki=%.2lf), (Kd=%.2lf) \n", Kp, Ki, Kd);
   printf("[2] - Informar os valores Kp, Ki e Kd manualmente\n\n");
 
   printf("Informe o numero da opcao desejada:\n");
@@ -31,6 +31,7 @@ void config_pid() {
   scanf(" %hd", &option);
 
   if (option == 2) {
+    printf("Informe o valor de Kp, Ki e Kd respectivamente (separados por espaco):\n");
     scanf(" %lf %lf %lf", &Kp, &Ki, &Kd);
     // setted values
     pid_configura_constantes(Kp, Ki, Kd);
