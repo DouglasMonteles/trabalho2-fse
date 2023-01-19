@@ -166,15 +166,15 @@ void handle_user_command(int command) {
     case 162:
       printf("Desliga o Forno\n");
       send_system_state(0);
+      send_working_status(0);
       printf("Forno DESLIGADO\n\n");
       break;
 
     case 163:
       printf("Inicia aquecimento\n");
       send_working_status(1);
-
-      printf("Aquecimento INICIADO\n\n");
       handle_potentiometer_process();
+      printf("Aquecimento INICIADO\n\n");
       break;
 
     case 164:
