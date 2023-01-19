@@ -4,6 +4,7 @@
     "pid.h": "c",
     "menu.h": "c",
     "gpio.h": "c",
-    "limits": "c"
+    "limits": "c",
+    "bme280_temperature.h": "c"
   }
 }

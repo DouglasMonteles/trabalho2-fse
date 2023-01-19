@@ -3,7 +3,7 @@
 
 #include "bme280.h"
 
-#define I2C_DIR_PATH "/dev/i2c-20"
+#define I2C_DIR_PATH "/dev/i2c-1" // rasp 47
 #define BME280_RESPONSE_SUCCESS 0
 #define BME280_RESPONSE_FAIL -1
 

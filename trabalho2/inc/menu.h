@@ -26,5 +26,6 @@ short handle_initial_menu();
 short menu();
 void handle_menu_option(short option);
 void handle_user_command(int command);
+void handle_potentiometer_process();
 
 #endif

@@ -4,6 +4,7 @@
 
 #include "menu.h"
 #include "gpio.h"
+#include "pid.h"
 #include "uart_modbus.h"
 #include "bme280_temperature.h"
 
@@ -40,11 +41,13 @@ short menu() {
 void handle_menu_option(short option) {
   switch (option) {
   case 1: 
-    turn_on_or_off_output(RESISTOR_GPIO);
+    turn_on_output(RESISTOR_GPIO);
+    turn_off_output(COOLER_GPIO);
     break;
 
   case 2: 
-    turn_on_or_off_output(COOLER_GPIO);
+    turn_off_output(RESISTOR_GPIO);
+    turn_on_output(COOLER_GPIO);
     break;
   
   case 4: {
@@ -168,8 +171,9 @@ void handle_user_command(int command) {
     case 163:
       printf("Inicia aquecimento\n");
       send_working_status(1);
-      
+
       printf("Aquecimento INICIADO\n\n");
+      handle_potentiometer_process();
       break;
 
     case 164:
@@ -186,4 +190,58 @@ void handle_user_command(int command) {
     default:
       printf("UNKNOWN\n");
   }
+}
+
+void handle_potentiometer_process() {
+  int user_command = 0;
+
+  do {
+    sleep(1);
+
+    init_bme280();
+    double temperature;
+    int result = get_temperature(&temperature);
+
+    if (result != BME280_RESPONSE_SUCCESS) {
+      printf("Erro na leitura do bme280\n");
+      exit(1);
+    }
+
+    pid_configura_constantes(Kp_DEFAULT, Ki_DEFAULT, Kd_DEFAULT); // default values
+
+    float reference_temperature = get_reference_temperature();
+    printf("Temperatura de referencia: %lf\n", reference_temperature);
+    pid_atualiza_referencia(reference_temperature);
+
+    float internal_temperature = request_float_intern_temperature_message();
+
+    if (internal_temperature < 0 || internal_temperature > 100) {
+      internal_temperature = 25;
+    }
+
+    float cooler_power, resistor_power;
+    float power = pid_controle(internal_temperature);
+
+    if (power >= 0) {
+      cooler_power = 0;
+      resistor_power = power;
+    } else {
+      cooler_power = power * (-1);
+
+      if (cooler_power < 40) {
+        cooler_power = 40;
+      }
+
+      resistor_power = 0;
+    }
+
+    printf("POWER DO POTENCIOMETRO: %f\n", power);
+    send_controller_sign((int) power);
+    handle_temperature_power(power);
+
+    printf("TI: %.2f TR: %.2f\n", internal_temperature, reference_temperature);
+
+    user_command = read_user_commands();
+    handle_user_command(user_command);
+  } while (user_command != 162);
 }

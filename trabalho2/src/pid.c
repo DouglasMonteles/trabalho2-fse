@@ -49,6 +49,10 @@ void pid_atualiza_referencia(float referencia_){
   referencia = (double) referencia_;
 }
 
+double get_reference_temperature() {
+  return referencia;
+}
+
 double pid_controle(double saida_medida) {
 
   double erro = referencia - saida_medida;

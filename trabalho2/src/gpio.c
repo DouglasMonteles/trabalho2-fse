@@ -6,20 +6,12 @@
 
 #include "gpio.h"
 
-short pin_status(int pin) {
-  return digitalRead(pin);
+void turn_on_output(int output) {
+  digitalWrite(output, HIGH);
 }
 
-void turn_on_or_off_output(int output) {
-  printf("O(A) %s estava: %s\n", get_gpio_name(output), pin_status(output) == LOW ? "DESLIGADO(A)" : "LIGADO(a)");
-
-  if (pin_status(output) == HIGH) {
-    digitalWrite(output, LOW);
-  } else {
-    digitalWrite(output, HIGH);
-  }
-  
-  printf("O(A) %s agora esta: %s\n", get_gpio_name(output), pin_status(output) == LOW ? "DESLIGADO(A)" : "LIGADO(A)");
+void turn_off_output(int output) {
+  digitalWrite(output, LOW);
 }
 
 char* get_gpio_name(int pin) {
@@ -44,7 +36,10 @@ void handle_gpio_interrupt() {
   digitalWrite(COOLER_GPIO, LOW);
 }
 
-void handle_temperature_power(double temp_power) {
+void handle_temperature_power(double temp) {
+  int temp_power = (int) temp;
+  printf("Temperatura a ser ativada: %d\n", temp_power);
+
   if (temp_power < 0) {
     temp_power *= -1;
     
@@ -60,13 +55,19 @@ void handle_temperature_power(double temp_power) {
 }
 
 void config_gpio_outputs() {
-  wiringPiSetup();
+  if (wiringPiSetup() == -1) {
+    printf("Erro ao inicializar a wiringPi\n");
+    exit(1);
+  }
 
-  pinMode(RESISTOR_GPIO, OUTPUT);
-  pinMode(COOLER_GPIO, OUTPUT);
+  pinMode(RESISTOR_GPIO, PWM_OUTPUT);
+  pinMode(COOLER_GPIO, PWM_OUTPUT);
 
   softPwmCreate(RESISTOR_GPIO, 1, 100);
   softPwmCreate(COOLER_GPIO, 1, 100);
+
+  softPwmWrite(RESISTOR_GPIO, 0);
+  softPwmWrite(COOLER_GPIO, 0);
 
   // bcm2835_gpio_fsel(RESISTOR_GPIO, BCM2835_GPIO_FSEL_OUTP);
   // bcm2835_gpio_fsel(COOLER_GPIO, BCM2835_GPIO_FSEL_OUTP);
