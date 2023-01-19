@@ -184,7 +184,7 @@ void handle_user_command(int command) {
       break;
 
     case 165:
-      printf("Menu : alterna entre o modo de Temperatura de Referência e Curva de Temperatura\n");
+      printf("Menu: alterna entre o modo de Temperatura de Referência e Curva de Temperatura\n");
       handle_menu_option(10);
       break;
 

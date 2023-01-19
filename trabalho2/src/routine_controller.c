@@ -25,7 +25,7 @@ void handle_terminal_process(double temperature) {
     sleep(1); // 1 seg
     user_command = read_user_commands();
     handle_user_command(user_command);
-  } while (user_command != 162);
+  } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
 }
 
 void handle_potentiometer_process() {
