@@ -8,6 +8,7 @@
 #include "menu.h"
 #include "uart_modbus.h"
 #include "bme280_temperature.h"
+#include "csv_controller.h"
 
 void handle_terminal_process(double temperature) {
   int user_command = 0;
@@ -70,4 +71,14 @@ void handle_potentiometer_process() {
   handle_temperature_power(power);
 
   printf("TI: %.2f TR: %.2f\n", internal_temperature, reference_temperature);
+  
+  logger_system_data data;
+
+  data.intern_temperature = internal_temperature;
+  data.external_temperature = temperature;
+  data.user_defined_temperature = reference_temperature;
+  data.resistor_active_percent = resistor_power;
+  data.cooler_active_percent = cooler_power;
+
+  register_system_logs_in_csv(data);
 }
