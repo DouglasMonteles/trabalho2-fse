@@ -5,6 +5,7 @@
 #include <softPwm.h>
 
 #include "gpio.h"
+#include "debug.h"
 
 void turn_on_output(int output) {
   digitalWrite(output, HIGH);
@@ -38,8 +39,7 @@ void handle_gpio_interrupt() {
 
 void handle_temperature_power(double temp) {
   int temp_power = (int) temp;
-  printf("Temperatura a ser ativada: %d\n", temp_power);
-
+  
   if (temp_power < 0) {
     temp_power *= -1;
     
@@ -56,7 +56,7 @@ void handle_temperature_power(double temp) {
 
 void config_gpio_outputs() {
   if (wiringPiSetup() == -1) {
-    printf("Erro ao inicializar a wiringPi\n");
+    log_error("Erro ao inicializar a wiringPi.");
     exit(1);
   }
 

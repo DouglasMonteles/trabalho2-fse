@@ -7,6 +7,7 @@
 
 #include "uart_modbus.h"
 #include "crc16.h"
+#include "debug.h"
 
 float request_float_intern_temperature_message(void) {
   float intern_temperature = -100.f;
@@ -32,16 +33,16 @@ float request_float_intern_temperature_message(void) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados!\n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -77,16 +78,16 @@ float request_float_reference_temperature_message(void) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados!\n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -122,16 +123,16 @@ int read_user_commands(void) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados!\n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -169,16 +170,16 @@ void send_controller_sign(int controller_sign) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados! s: \n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito");
     }
   }
 
@@ -212,16 +213,16 @@ void send_reference_sign(float reference_sign) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados!\n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -256,16 +257,16 @@ int send_system_state(char state) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados! \n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -304,16 +305,16 @@ int send_controller_mode(char mode) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados! \n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -352,16 +353,16 @@ int send_working_status(char status) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados! \n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -400,16 +401,16 @@ float send_room_temperature(float room_temperature) {
   
   p_tx_buffer += sizeof(crc_value);
 
-  printf("Buffers de memória criados! \n");
+  log_info("Buffers de memória criados!");
 
   if (uart0_filestream != -1) {
-    printf("Escrevendo caracteres na UART ...");
+    log_info("Escrevendo caracteres na UART ...");
     int count = write(uart0_filestream, &tx_buffer[0], (p_tx_buffer - &tx_buffer[0]));
     
     if (count < 0) {
-      printf("UART TX error\n");
+      log_error("UART TX error");
     } else {
-      printf("escrito.\n");
+      log_info("escrito.");
     }
   }
 
@@ -429,9 +430,9 @@ void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
     int rx_length = read(uart0_filestream, (void *)rx_buffer, 255); // Filestream, buffer to store in, number of bytes to read (max)
     
     if (rx_length < 0) {
-      printf("Erro na leitura.\n"); // An error occured (will occur if there are no bytes)
+      log_error("Erro na leitura."); // An error occured (will occur if there are no bytes)
     } else if (rx_length == 0) {
-      printf("Nenhum dado disponível.\n"); // No data waiting
+      log_warn("Nenhum dado disponível."); // No data waiting
     } else {
       // Bytes received
       rx_buffer[rx_length] = '\0';
@@ -443,7 +444,9 @@ void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
           int response;
 
           memcpy(&response, &rx_buffer[3], sizeof(response));
-          printf("%i Bytes lidos : %d\n", rx_length, response);
+          #ifndef IS_DEBUG_ENABLED
+            printf("%i Bytes lidos : %d\n", rx_length, response);
+          #endif
           memcpy(&crc_buffer, &rx_buffer[7], sizeof(short));
           crc_response = calcula_CRC(rx_buffer, 7);
 
@@ -455,7 +458,9 @@ void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
           float response;
 
           memcpy(&response, &rx_buffer[3], sizeof(response));
-          printf("%i Bytes lidos : %f\n", rx_length, response);
+          #ifndef IS_DEBUG_ENABLED
+            printf("%i Bytes lidos : %f\n", rx_length, response);
+          #endif
           memcpy(&crc_buffer, &rx_buffer[7], sizeof(short));
           crc_response = calcula_CRC(rx_buffer, 7);
 
@@ -467,20 +472,27 @@ void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
           char response[255];
 
           memcpy(&response, &rx_buffer[4], rx_buffer[3]);
-          printf("%i Bytes lidos : %s\n", rx_length, response);
+          #ifndef IS_DEBUG_ENABLED
+            printf("%i Bytes lidos : %s\n", rx_length, response);
+          #endif
           memcpy(&crc_buffer, &rx_buffer[5+rx_buffer[3]], sizeof(short));
           crc_response = calcula_CRC(rx_buffer, 5+rx_buffer[3]);
           break;
         }
 
         default:
-          printf("Erro na passagem do tipo de dado!\n");
+          log_error("Erro na passagem do tipo de dado!");
       }
 
       if (crc_response == crc_buffer) {
-        printf("CRC Validado: %i\n", crc_buffer);
+        #ifndef IS_DEBUG_ENABLED
+          printf("CRC Validado: %i\n", crc_buffer);
+        #endif
+
       } else {
-        printf("CRC INVALIDO. \nCRC buffer: %i != CRC CALC: %i\n", crc_buffer, crc_response);
+        #ifndef IS_DEBUG_ENABLED
+          printf("CRC INVALIDO. \nCRC buffer: %i != CRC CALC: %i\n", crc_buffer, crc_response);
+        #endif
       }
     }
   }
@@ -493,9 +505,9 @@ int init_uart() {
   uart0_filestream = open(FILE_UART, O_RDWR | O_NOCTTY | O_NDELAY); // Open in non blocking read/write mode
   
   if (uart0_filestream == -1) {
-    printf("Erro - Não foi possível iniciar a UART.\n");
+    log_error("Erro - Não foi possível iniciar a UART.");
   } else {
-    printf("UART inicializada!\n");
+    log_info("UART inicializada!");
   }
 
   config_uart(uart0_filestream);

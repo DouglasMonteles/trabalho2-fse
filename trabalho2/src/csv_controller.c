@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "csv_controller.h"
+#include "debug.h"
 
 struct tm * get_instant_data() {
   time_t instant;
@@ -57,10 +58,9 @@ int obtain_temperature_curve_from_csv(int* time_in_seconds, float* temperature) 
       counter_char++;
     }
     
-
-    
-    printf("Dado lido: %d %f\n", time_in_seconds[counter], temperature[counter]);
-
+    #ifndef IS_DEBUG_ENABLED
+      printf("Dado lido: %d %f\n", time_in_seconds[counter], temperature[counter]);
+    #endif
     counter++;
   }
 

@@ -12,6 +12,7 @@
 #include "uart_modbus.h"
 #include "bme280_temperature.h"
 #include "routine_controller.h"
+#include "debug.h"
 
 int main(int argc, char **argv) {
   short option;
@@ -75,7 +76,7 @@ void init_application_configs() {
 }
 
 void handle_interrupt(int signal) {
-  printf("\n\nInterrompendo o programa e finalizando os processos abertos...\n");
+  printf("Interrompendo o programa e finalizando os processos abertos...\n");
   
   handle_gpio_interrupt(); // GPIO
   bme280_driver_close();   // BME280 driver
@@ -84,6 +85,6 @@ void handle_interrupt(int signal) {
   send_working_status(0);     // liga / desliga
   send_controller_mode(0);    // Controle via dashboard ou curva / terminal
 
-  printf("Todos os processos utilizados pelo programa foram finalizados com sucesso\n\n");
+  printf("Todos os processos utilizados pelo programa foram finalizados com sucesso\n");
   exit(0);
 }

@@ -8,6 +8,7 @@
 #include "uart_modbus.h"
 #include "bme280_temperature.h"
 #include "routine_controller.h"
+#include "debug.h"
 
 short handle_initial_menu() {
   short option;
@@ -189,6 +190,6 @@ void handle_user_command(int command) {
       break;
 
     default:
-      printf("UNKNOWN\n");
+      printf("Aguardando usuario informar um comando valido...\n");
   }
 }
