@@ -1,6 +1,9 @@
+#define _DEFAULT_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "routine_controller.h"
 #include "pid.h"
@@ -81,4 +84,51 @@ void handle_potentiometer_process() {
   data.cooler_active_percent = cooler_power;
 
   register_system_logs_in_csv(data);
+}
+
+void handle_temperature_curve_process() {
+  int user_command = 0;
+
+  int time_in_seconds[800];
+  float temperature[800];
+  int counter_time = 0, counter_temperature = 0, current_second = 0;
+
+  int file_data_size = obtain_temperature_curve_from_csv(time_in_seconds, temperature);
+
+  if (file_data_size <= 0) {
+    printf("Nao ha dados no csv fornecido para a leitura do tempo e temperatura.\n");
+    return;
+  }
+
+  int current_time_in_seconds = time_in_seconds[0];
+  float current_temperature = temperature[0];
+
+  send_system_state(1);
+  send_working_status(1);
+
+  do {
+    // Atualizando a referencia do PID
+    pid_atualiza_referencia(current_temperature);
+    send_reference_sign(current_temperature);
+
+    handle_potentiometer_process();
+
+    if (file_data_size == 11) {
+      printf("Ultima linha lida: %d %f\n", current_time_in_seconds, current_temperature);
+    }
+    
+    usleep(500000); // 0.5 seconds
+    current_second++;
+
+    printf("\n\n\nTempo: %d, Temperatura: %f\n\n\n", current_second, current_temperature);
+
+    if (current_second == time_in_seconds[counter_time+1]) {
+      current_time_in_seconds = time_in_seconds[++counter_time];
+      current_temperature = temperature[++counter_temperature];
+    }
+
+    if (current_second == 600) {
+      break;
+    }
+  } while (counter_temperature != (file_data_size - 1) && counter_time != (file_data_size - 1)); // desligar ou parar o forno
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include <time.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "csv_controller.h"
 
@@ -26,4 +27,43 @@ void register_system_logs_in_csv(logger_system_data data) {
   fprintf(log_csv_file, "%.2lf,", data.cooler_active_percent);
   fprintf(log_csv_file, "\n");
   fclose(log_csv_file);
+}
+
+int obtain_temperature_curve_from_csv(int* time_in_seconds, float* temperature) {
+  char row[100];
+  char* character;
+  int counter = 0;
+  
+  FILE *csv_curve_file = fopen(CURVA_REFLOW_FILE_PATH, READ_FILE_ONLY);
+
+  while (feof(csv_curve_file) != 1) {
+    // Read the first row and do nothing
+    if (counter == 0)
+      fgets(row, 100, csv_curve_file);
+
+    fgets(row, 100, csv_curve_file);
+    character = strtok(row, ",");
+
+    int counter_char = 0;
+
+    while (character != NULL) {
+      if (counter_char == 0) {  // Time param
+        time_in_seconds[counter] = atoi(character);
+      } else if (counter_char == 1) {                  // Temperature param
+        temperature[counter] = atof(character);
+      }
+
+      character = strtok(NULL, ",");
+      counter_char++;
+    }
+    
+
+    
+    printf("Dado lido: %d %f\n", time_in_seconds[counter], temperature[counter]);
+
+    counter++;
+  }
+
+  fclose(csv_curve_file);
+  return counter;
 }

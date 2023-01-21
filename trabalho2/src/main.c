@@ -24,16 +24,29 @@ int main(int argc, char **argv) {
 
     // option == 1: Terminal
     if (option == 1) {
-      double temperature;
-
-      printf("Informe o valor da temperatura que deseja que o forno alcance:\n");
-      scanf("%lf", &temperature);
-
-      // send_system_state(1);       // liga / desliga o sistema
-      // send_working_status(1);     // funcionando / parado
-
       send_controller_mode(1);      // Controle via curva / terminal
-      handle_terminal_process(temperature);
+      
+      short terminal_option = 1;
+
+      printf("[1] - Informar manualmente uma temperatura de referencia.\n");
+      printf("[2] - Utilizar o arquivo de curva (csv) para definir a temperatura (graus Celsius) em um dado tempo (segundos)\n");
+
+      scanf(" %hd", &terminal_option);
+
+      if (terminal_option == 1) {
+        double temperature;
+
+        printf("Informe o valor da temperatura que deseja que o forno alcance:\n");
+        scanf("%lf", &temperature);
+
+        handle_terminal_process(temperature);
+      } else if (terminal_option == 2) {
+        printf("O arquivo de curva de temperatura sera utilizado.\n");
+        handle_temperature_curve_process();
+      } else {
+        printf("Opcao invalida!\n");
+      }
+    } else if (option == 2) { // Dashboard
     }
   } while (option == 1 || option == 2);
 

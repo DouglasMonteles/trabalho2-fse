@@ -4,6 +4,7 @@
 #define DEFAULT_TEMPERATURE 20
 
 void handle_terminal_process(double temperature);
+void handle_temperature_curve_process();
 void handle_potentiometer_process();
 
 #endif
