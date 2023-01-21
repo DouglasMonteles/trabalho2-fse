@@ -91,7 +91,6 @@ void handle_temperature_curve_process() {
 
   int time_in_seconds[800];
   float temperature[800];
-  int counter_time = 0, counter_temperature = 0, current_second = 0;
 
   int file_data_size = obtain_temperature_curve_from_csv(time_in_seconds, temperature);
 
@@ -100,8 +99,10 @@ void handle_temperature_curve_process() {
     return;
   }
 
-  int current_time_in_seconds = time_in_seconds[0];
+  int current_time_in_seconds = time_in_seconds[0], current_second = 0;
+  int counter_time = 0, counter_temperature = 0;
   float current_temperature = temperature[0];
+  float old_temperature = -101.f;
 
   send_system_state(1);
   send_working_status(1);
@@ -109,13 +110,17 @@ void handle_temperature_curve_process() {
   do {
     // Atualizando a referencia do PID
     pid_atualiza_referencia(current_temperature);
-    send_reference_sign(current_temperature);
+    
+    if (current_temperature != old_temperature)
+      send_reference_sign(current_temperature);
 
     handle_potentiometer_process();
 
     if (file_data_size == 11) {
       printf("Ultima linha lida: %d %f\n", current_time_in_seconds, current_temperature);
     }
+
+    old_temperature = current_temperature;
     
     usleep(500000); // 0.5 seconds
     current_second++;
@@ -127,7 +132,7 @@ void handle_temperature_curve_process() {
       current_temperature = temperature[++counter_temperature];
     }
 
-    if (current_second == 600) {
+    if (current_second == time_in_seconds[file_data_size-1] || current_second == 600) {
       break;
     }
   } while (counter_temperature != (file_data_size - 1) && counter_time != (file_data_size - 1)); // desligar ou parar o forno
