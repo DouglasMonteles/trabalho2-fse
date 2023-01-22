@@ -47,11 +47,6 @@ int main(int argc, char **argv) {
     }
   } while (option == 1 || option == 2);
 
-  // REMOVER
-  while ((option = menu()) != EXIT) {
-    handle_menu_option(option);
-  }
-
   return 0;
 }
 

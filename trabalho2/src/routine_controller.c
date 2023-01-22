@@ -25,19 +25,21 @@ void handle_terminal_process() {
   // Atualizando a referencia do PID
   pid_atualiza_referencia(temperature);
   send_reference_sign(temperature);
+  sleep(1);
 
   send_system_state(1);
   send_working_status(1);
 
   system("clear");
 
-  do {
+  //do {
     handle_potentiometer_process(IS_CSV_CURVE_FILE);
 
-    usleep(50000); // 1 seg
-    user_command = read_user_commands();
-    handle_user_command(user_command);
-  } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
+    // usleep(500000); // 1 seg
+    // user_command = read_user_commands();
+    // handle_user_command(user_command);
+    // printf("terminal\n");
+  //} while (user_command != 162 && user_command != 164); // desligar ou parar o forno
 }
 
 void handle_temperature_curve_process() {
@@ -71,7 +73,7 @@ void handle_temperature_curve_process() {
     if (current_temperature != old_temperature)
       send_reference_sign(current_temperature);
 
-    handle_potentiometer_process(IS_CSV_CURVE_FILE);
+    int user_command = handle_potentiometer_process(IS_CSV_CURVE_FILE);
 
     old_temperature = current_temperature;
     
@@ -89,21 +91,19 @@ void handle_temperature_curve_process() {
       break;
     }
 
-    usleep(50000); // 1 seg
-    user_command = read_user_commands();
-    handle_user_command(user_command);
+    if (user_command == 162 || user_command == 164) break;
 
-    // Change system mode (Dashboard or Terminal)
-    if (user_command == 162 || user_command == 164) 
-      break;
+    // usleep(500000); // 1 seg
+    // user_command = read_user_commands();
+    // handle_user_command(user_command);
+
+    // if (user_command == 162 || user_command == 164) 
+    //   break;
   } while (counter_temperature != (file_data_size - 1) && counter_time != (file_data_size - 1)); // end of data of csv
 }
 
 void handle_dashboard_process() {
   int user_command = 0;
-
-  send_system_state(1);
-  send_system_state(1);
 
   do {
     user_command = read_user_commands();
@@ -113,7 +113,7 @@ void handle_dashboard_process() {
   } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
 }
 
-void handle_potentiometer_process(short is_csv_curve) {
+int handle_potentiometer_process(short is_csv_curve) {
   int user_command = 0;
   
   double temperature;
@@ -129,56 +129,61 @@ void handle_potentiometer_process(short is_csv_curve) {
   // get_temperature
   float reference_temperature;
   
-  if (is_csv_curve == 1) { // csv curve
-    reference_temperature = get_reference_temperature();
-  } else { // manual temperature
-    reference_temperature = request_float_reference_temperature_message();
-  }
-
-  pid_atualiza_referencia(reference_temperature);
-
-  float internal_temperature = request_float_intern_temperature_message();
-
-  if (internal_temperature < 0 || internal_temperature > 100) {
-    internal_temperature = 25;
-  }
-
-  float cooler_power, resistor_power;
-  float power = pid_controle(internal_temperature);
-
-  if (power >= 0) {
-    cooler_power = 0;
-    resistor_power = power;
-  } else {
-    cooler_power = power * (-1);
-
-    if (cooler_power < 40) {
-      cooler_power = 40;
+  do {
+    if (is_csv_curve == 1) { // csv curve
+      reference_temperature = get_reference_temperature();
+    } else { // manual temperature
+      reference_temperature = request_float_reference_temperature_message();
     }
 
-    resistor_power = 0;
-  }
+    pid_atualiza_referencia(reference_temperature);
 
-  send_controller_sign((int) power);
-  handle_temperature_power(power);
-  
-  logger_system_data data;
+    float internal_temperature = request_float_intern_temperature_message();
 
-  data.intern_temperature = internal_temperature;
-  data.external_temperature = temperature;
-  data.user_defined_temperature = reference_temperature;
-  data.resistor_active_percent = resistor_power;
-  data.cooler_active_percent = cooler_power;
+    if (internal_temperature < 0 || internal_temperature > 100) {
+      internal_temperature = 25;
+    }
 
-  struct tm *instant_data;
-  instant_data = get_instant_data();
+    float cooler_power, resistor_power;
+    float power = pid_controle(internal_temperature);
 
-  printf("\nTI: %.2f TR: %.2f TE: %.2lf REGISTOR: %.2f(%) COOLER: %.2f(%)\n", data.intern_temperature, data.user_defined_temperature, data.external_temperature, data.resistor_active_percent, data.cooler_active_percent);
+    if (power >= 0) {
+      cooler_power = 0;
+      resistor_power = power;
+    } else {
+      cooler_power = power * (-1);
 
-  register_system_logs_in_csv(data);
+      if (cooler_power < 40) {
+        cooler_power = 40;
+      }
 
-  usleep(50000); // 1 seg
-  user_command = read_user_commands();
-  handle_user_command(user_command);
+      resistor_power = 0;
+    }
+
+    send_controller_sign((int) power);
+    handle_temperature_power(power);
+    
+    logger_system_data data;
+
+    data.intern_temperature = internal_temperature;
+    data.external_temperature = temperature;
+    data.user_defined_temperature = reference_temperature;
+    data.resistor_active_percent = resistor_power;
+    data.cooler_active_percent = cooler_power;
+
+    struct tm *instant_data;
+    instant_data = get_instant_data();
+
+    printf("\nTI: %.2f TR: %.2f TE: %.2lf RESISTOR: %.2f(%) COOLER: %.2f(%)\n", data.intern_temperature, data.user_defined_temperature, data.external_temperature, data.resistor_active_percent, data.cooler_active_percent);
+
+    register_system_logs_in_csv(data);
+
+    usleep(500000); // 0.5 seg
+    user_command = read_user_commands();
+    handle_user_command(user_command);
+    
+  } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
+
+  return user_command;
 }
 

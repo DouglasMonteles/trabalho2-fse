@@ -8,6 +8,6 @@
 void handle_terminal_process();
 void handle_temperature_curve_process();
 void handle_dashboard_process();
-void handle_potentiometer_process(short is_csv_curve);
+int handle_potentiometer_process(short is_csv_curve);
 
 #endif

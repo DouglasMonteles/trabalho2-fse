@@ -18,6 +18,7 @@ short handle_initial_menu() {
   printf("Escolha o modo de operacao da aplicacao:\n");
   printf("[1] - Modo Terminal\n");
   printf("[2] - Modo UART\n");
+  printf("[Ctrl+c] - Finalizar programa\n");
 
   scanf(" %hd", &option);
   return option;
