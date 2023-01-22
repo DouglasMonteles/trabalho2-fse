@@ -14,8 +14,13 @@
 #include "csv_controller.h"
 #include "debug.h"
 
-void handle_terminal_process(double temperature) {
+void handle_terminal_process() {
   int user_command = 0;
+
+  double temperature;
+
+  printf("Informe o valor da temperatura que deseja que o forno alcance:\n");
+  scanf("%lf", &temperature);
 
   // Atualizando a referencia do PID
   pid_atualiza_referencia(temperature);
@@ -27,9 +32,9 @@ void handle_terminal_process(double temperature) {
   system("clear");
 
   do {
-    handle_potentiometer_process();
+    handle_potentiometer_process(IS_CSV_CURVE_FILE);
 
-    sleep(1); // 1 seg
+    usleep(50000); // 1 seg
     user_command = read_user_commands();
     handle_user_command(user_command);
   } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
@@ -66,7 +71,7 @@ void handle_temperature_curve_process() {
     if (current_temperature != old_temperature)
       send_reference_sign(current_temperature);
 
-    handle_potentiometer_process();
+    handle_potentiometer_process(IS_CSV_CURVE_FILE);
 
     old_temperature = current_temperature;
     
@@ -83,10 +88,34 @@ void handle_temperature_curve_process() {
     if (current_second == time_in_seconds[file_data_size-1] || current_second == 600) {
       break;
     }
-  } while (counter_temperature != (file_data_size - 1) && counter_time != (file_data_size - 1)); // desligar ou parar o forno
+
+    usleep(50000); // 1 seg
+    user_command = read_user_commands();
+    handle_user_command(user_command);
+
+    // Change system mode (Dashboard or Terminal)
+    if (user_command == 162 || user_command == 164) 
+      break;
+  } while (counter_temperature != (file_data_size - 1) && counter_time != (file_data_size - 1)); // end of data of csv
 }
 
-void handle_potentiometer_process() {
+void handle_dashboard_process() {
+  int user_command = 0;
+
+  send_system_state(1);
+  send_system_state(1);
+
+  do {
+    user_command = read_user_commands();
+    handle_user_command(user_command);
+    
+    usleep(500000); // 0.5 seg
+  } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
+}
+
+void handle_potentiometer_process(short is_csv_curve) {
+  int user_command = 0;
+  
   double temperature;
   int result = get_temperature(&temperature);
 
@@ -97,7 +126,14 @@ void handle_potentiometer_process() {
 
   pid_configura_constantes(Kp_DEFAULT, Ki_DEFAULT, Kd_DEFAULT); // default values
 
-  float reference_temperature = get_reference_temperature();
+  // get_temperature
+  float reference_temperature;
+  
+  if (is_csv_curve == 1) { // csv curve
+    reference_temperature = get_reference_temperature();
+  } else { // manual temperature
+    reference_temperature = request_float_reference_temperature_message();
+  }
 
   pid_atualiza_referencia(reference_temperature);
 
@@ -140,5 +176,9 @@ void handle_potentiometer_process() {
   printf("\nTI: %.2f TR: %.2f TE: %.2lf REGISTOR: %.2f(%) COOLER: %.2f(%)\n", data.intern_temperature, data.user_defined_temperature, data.external_temperature, data.resistor_active_percent, data.cooler_active_percent);
 
   register_system_logs_in_csv(data);
+
+  usleep(50000); // 1 seg
+  user_command = read_user_commands();
+  handle_user_command(user_command);
 }
 

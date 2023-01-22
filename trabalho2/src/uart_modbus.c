@@ -494,8 +494,6 @@ short check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
       rx_buffer[rx_length] = '\0';
 
       short crc_buffer, crc_response;
-
-      printf("Uart iniciada!\n");
       
       switch (type) {
         case INT: {

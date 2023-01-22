@@ -35,12 +35,7 @@ int main(int argc, char **argv) {
       scanf(" %hd", &terminal_option);
 
       if (terminal_option == 1) {
-        double temperature;
-
-        printf("Informe o valor da temperatura que deseja que o forno alcance:\n");
-        scanf("%lf", &temperature);
-
-        handle_terminal_process(temperature);
+        handle_terminal_process();
       } else if (terminal_option == 2) {
         printf("O arquivo de curva de temperatura sera utilizado.\n");
         handle_temperature_curve_process();
@@ -48,6 +43,7 @@ int main(int argc, char **argv) {
         printf("Opcao invalida!\n");
       }
     } else if (option == 2) { // Dashboard
+      handle_dashboard_process();
     }
   } while (option == 1 || option == 2);
 

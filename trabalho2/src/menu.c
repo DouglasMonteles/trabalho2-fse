@@ -10,6 +10,8 @@
 #include "routine_controller.h"
 #include "debug.h"
 
+int is_temperature_manual_or_curve = 0;
+
 short handle_initial_menu() {
   short option;
 
@@ -174,7 +176,7 @@ void handle_user_command(int command) {
     case 163:
       printf("Inicia aquecimento\n");
       send_working_status(1);
-      handle_potentiometer_process();
+      handle_potentiometer_process(is_temperature_manual_or_curve);
       printf("Aquecimento INICIADO\n\n");
       break;
 
@@ -184,12 +186,41 @@ void handle_user_command(int command) {
       printf("Aquecimento CANCELADO\n\n");
       break;
 
-    case 165:
+    case 165: { // option 165
       printf("Menu: alterna entre o modo de Temperatura de Referência e Curva de Temperatura\n");
-      handle_menu_option(10);
+      
+      char controller_mode = (is_temperature_manual_or_curve == 0) ? 1 : 0;
+      int mode = send_controller_mode(controller_mode);
+
+      is_temperature_manual_or_curve = mode;
+
+      printf("Modo de controle: %s\n", (mode == 0) ? "Dashboard" : "Curva/Terminal");
+
+      if (mode == 0) {
+        handle_potentiometer_process(mode);
+      } else if (mode == 1) {
+        send_controller_mode(1);      // Controle via curva / terminal
+      
+        short terminal_option = 1;
+
+        printf("[1] - Informar manualmente uma temperatura de referencia.\n");
+        printf("[2] - Utilizar o arquivo de curva (csv) para definir a temperatura (graus Celsius) em um dado tempo (segundos)\n");
+
+        scanf(" %hd", &terminal_option);
+
+        if (terminal_option == 1) {
+          handle_terminal_process();
+        } else if (terminal_option == 2) {
+          printf("O arquivo de curva de temperatura sera utilizado.\n");
+          handle_temperature_curve_process();
+        } else {
+          printf("Opcao invalida!\n");
+        }
+      }
       break;
+    }
 
     default:
-      printf("Aguardando usuario informar um comando valido...\n");
+      printf("Aguardando o usuario informar um comando...\n");
   }
 }
