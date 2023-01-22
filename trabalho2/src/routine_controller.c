@@ -19,7 +19,7 @@ void handle_terminal_process() {
 
   double temperature;
 
-  printf("Informe o valor da temperatura que deseja que o forno alcance:\n");
+  printf("\nInforme o valor da temperatura que deseja que o forno alcance:\n");
   scanf("%lf", &temperature);
 
   // Atualizando a referencia do PID
@@ -32,14 +32,7 @@ void handle_terminal_process() {
 
   system("clear");
 
-  //do {
-    handle_potentiometer_process(IS_CSV_CURVE_FILE);
-
-    // usleep(500000); // 1 seg
-    // user_command = read_user_commands();
-    // handle_user_command(user_command);
-    // printf("terminal\n");
-  //} while (user_command != 162 && user_command != 164); // desligar ou parar o forno
+  handle_potentiometer_process(IS_CSV_CURVE_FILE);
 }
 
 void handle_temperature_curve_process() {
@@ -93,12 +86,6 @@ void handle_temperature_curve_process() {
 
     if (user_command == 162 || user_command == 164) break;
 
-    // usleep(500000); // 1 seg
-    // user_command = read_user_commands();
-    // handle_user_command(user_command);
-
-    // if (user_command == 162 || user_command == 164) 
-    //   break;
   } while (counter_temperature != (file_data_size - 1) && counter_time != (file_data_size - 1)); // end of data of csv
 }
 

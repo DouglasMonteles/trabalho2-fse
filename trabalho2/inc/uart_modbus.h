@@ -10,6 +10,9 @@
 #define STR 's'
 #define VOID 'v'
 
+#define ON 1
+#define OFF 0
+
 #define DEVICE_ADDRESS_CODE 0x01                              // device address
 #define FUNCTION_REQUEST_CODE 0x23                            // function code
 #define FUNCTION_SEND_CODE 0x16                               // function code

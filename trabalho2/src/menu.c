@@ -13,12 +13,15 @@
 int is_temperature_manual_or_curve = 0;
 
 short handle_initial_menu() {
+  system("clear");
   short option;
 
-  printf("Escolha o modo de operacao da aplicacao:\n");
+  printf("\n\n==================== MENU DE CONTROLE =========================\n");
   printf("[1] - Modo Terminal\n");
   printf("[2] - Modo UART\n");
-  printf("[Ctrl+c] - Finalizar programa\n");
+  printf("[Ctrl+c] - Finalizar programa\n\n");
+  printf("Informe o numero da operacao desejada ou Ctrl+c para finalizar:\n");
+  printf("==================== =============== =========================\n\n");
 
   scanf(" %hd", &option);
   return option;
@@ -187,7 +190,7 @@ void handle_user_command(int command) {
       printf("Aquecimento CANCELADO\n\n");
       break;
 
-    case 165: { // option 165
+    case 165: { 
       printf("Menu: alterna entre o modo de Temperatura de Referência e Curva de Temperatura\n");
       
       char controller_mode = (is_temperature_manual_or_curve == 0) ? 1 : 0;

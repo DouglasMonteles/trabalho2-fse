@@ -92,6 +92,7 @@ int32_t get_temperature(double *temperature){
 
 void bme280_driver_close(void){
     close(file_descriptor);
+    printf("BME 280 finalizado com sucesso!\n");
 }
 
 // int main() {

@@ -6,6 +6,7 @@
     "gpio.h": "c",
     "limits": "c",
     "bme280_temperature.h": "c",
-    "routine_controller.h": "c"
+    "routine_controller.h": "c",
+    "uart_modbus.h": "c"
   }
 }

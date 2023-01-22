@@ -35,6 +35,7 @@ void handle_gpio_interrupt() {
 
   digitalWrite(RESISTOR_GPIO, LOW);
   digitalWrite(COOLER_GPIO, LOW);
+  printf("GPIO finalizada com sucesso!\n");
 }
 
 void handle_temperature_power(double temp) {

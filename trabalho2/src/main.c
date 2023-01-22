@@ -29,9 +29,12 @@ int main(int argc, char **argv) {
       
       short terminal_option = 1;
 
+      printf("\n");
       printf("[1] - Informar manualmente uma temperatura de referencia.\n");
       printf("[2] - Utilizar o arquivo de curva (csv) para definir a temperatura (graus Celsius) em um dado tempo (segundos)\n");
+      printf("\n");
 
+      printf("Informe o numero da operacao desejada ou Ctrl+c para finalizar:\n");
       scanf(" %hd", &terminal_option);
 
       if (terminal_option == 1) {
@@ -67,15 +70,18 @@ void init_application_configs() {
 }
 
 void handle_interrupt(int signal) {
-  printf("Interrompendo o programa e finalizando os processos abertos...\n");
+  printf("\n\nInterrompendo o programa e finalizando os processos abertos...\n");
   
   handle_gpio_interrupt(); // GPIO
   bme280_driver_close();   // BME280 driver
 
-  send_system_state(0);       // liga / desliga o sistema
-  send_working_status(0);     // liga / desliga
-  send_controller_mode(0);    // Controle via dashboard ou curva / terminal
+  send_system_state(OFF);       // liga / desliga o sistema
+  printf("Forno desligado!\n");
+  send_working_status(OFF);     // liga / desliga
+  printf("Funcionamento do forno desligado!\n");
+  send_controller_mode(OFF);    // Controle via dashboard ou curva / terminal
+  printf("Modo de controle via dashboard!\n");
 
-  printf("Todos os processos utilizados pelo programa foram finalizados com sucesso\n");
+  printf("\n\nTodos os processos utilizados pelo programa foram finalizados com sucesso!\n\n");
   exit(0);
 }

@@ -20,7 +20,7 @@ void config_pid() {
   Ki = Ki_DEFAULT;
   Kd = Kd_DEFAULT;  
 
-  printf("\n\nComo deseja inicializar as constantes do PID?\n");
+  printf("\n\nComo deseja inicializar as constantes do PID?\n\n");
   printf("[1] - Usar valores padrao (Kp=%.2lf), (Ki=%.2lf), (Kd=%.2lf) \n", Kp, Ki, Kd);
   printf("[2] - Informar os valores Kp, Ki e Kd manualmente\n\n");
 
@@ -38,6 +38,8 @@ void config_pid() {
   } else if (option < 0 || option >= 3) {
     printf("Informe uma opcao valida!\n");
   }
+
+  printf("Configurando o forno, aguarde...\n");
 }
 
 void pid_configura_constantes(double Kp_, double Ki_, double Kd_) {
