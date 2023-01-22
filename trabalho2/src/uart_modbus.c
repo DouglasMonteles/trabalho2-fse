@@ -48,8 +48,13 @@ float request_float_intern_temperature_message(void) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, FLOAT, &intern_temperature);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, FLOAT, &intern_temperature);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[request_float_intern_temperature_message]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return request_float_intern_temperature_message();
+  }
 
   return intern_temperature;
 }
@@ -93,8 +98,13 @@ float request_float_reference_temperature_message(void) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, FLOAT, &reference_temperature);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, FLOAT, &reference_temperature);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[request_float_reference_temperature_message]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return request_float_reference_temperature_message();
+  }
 
   return reference_temperature;
 }
@@ -138,13 +148,19 @@ int read_user_commands(void) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, INT, &command);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, INT, &command);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("read_user_commands]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return read_user_commands();
+  }
 
   return command;
 }
 
 void send_controller_sign(int controller_sign) {
+  int sign;
   int uart0_filestream = init_uart();
 
   unsigned char tx_buffer[20];
@@ -184,10 +200,18 @@ void send_controller_sign(int controller_sign) {
   }
 
   sleep(1);
+  
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, VOID, &sign);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[send_controller_sign]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return send_controller_sign(controller_sign);
+  }
 }
 
 void send_reference_sign(float reference_sign) {
+  int sign;
   int uart0_filestream = init_uart();
 
   unsigned char tx_buffer[20];
@@ -227,7 +251,15 @@ void send_reference_sign(float reference_sign) {
   }
 
   sleep(1);
+
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, VOID, &sign);
+  
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[send_reference_sign]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return send_reference_sign(reference_sign);
+  }
 }
 
 int send_system_state(char state) {
@@ -272,8 +304,13 @@ int send_system_state(char state) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, INT, &system_state);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, INT, &system_state);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[send_system_state]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return send_system_state(state);
+  }
 
   return system_state;
 }
@@ -320,8 +357,13 @@ int send_controller_mode(char mode) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, INT, &controller_mode);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, INT, &controller_mode);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[send_controller_mode]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return send_controller_mode(mode);
+  }
 
   return controller_mode;
 }
@@ -368,8 +410,13 @@ int send_working_status(char status) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, INT, &working_status);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, INT, &working_status);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[send_working_status]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return send_working_status(status);
+  }
 
   return working_status;
 }
@@ -416,13 +463,18 @@ float send_room_temperature(float room_temperature) {
 
   sleep(1);
 
-  check_for_any_rx_bytes(uart0_filestream, FLOAT, &temperature);
+  short is_crc_valid = check_for_any_rx_bytes(uart0_filestream, FLOAT, &temperature);
   close(uart0_filestream);
+
+  if (is_crc_valid == 0) {
+    printf("[send_room_temperature]: Erro na validacao do CSV ou validacao da uart, tentando novamente...\n");
+    return send_room_temperature(room_temperature);
+  }
 
   return temperature;
 }
 
-void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
+short check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
   //----- CHECK FOR ANY RX BYTES -----
   if (uart0_filestream != -1) {
     // Read up to 255 characters from the port if they are there
@@ -433,11 +485,17 @@ void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
       log_error("Erro na leitura."); // An error occured (will occur if there are no bytes)
     } else if (rx_length == 0) {
       log_warn("Nenhum dado disponível."); // No data waiting
+      
+      if (type == VOID) {
+        return 1;
+      }
     } else {
       // Bytes received
       rx_buffer[rx_length] = '\0';
 
       short crc_buffer, crc_response;
+
+      printf("Uart iniciada!\n");
       
       switch (type) {
         case INT: {
@@ -488,16 +546,17 @@ void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out) {
         #ifndef IS_DEBUG_ENABLED
           printf("CRC Validado: %i\n", crc_buffer);
         #endif
-
+        return 1;
       } else {
         #ifndef IS_DEBUG_ENABLED
           printf("CRC INVALIDO. \nCRC buffer: %i != CRC CALC: %i\n", crc_buffer, crc_response);
         #endif
+        return 0;
       }
     }
   }
 
-  printf("\n");
+  return 0;
 }
 
 int init_uart() {

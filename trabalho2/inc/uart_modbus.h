@@ -8,6 +8,7 @@
 #define INT 'd'
 #define FLOAT 'f'
 #define STR 's'
+#define VOID 'v'
 
 #define DEVICE_ADDRESS_CODE 0x01                              // device address
 #define FUNCTION_REQUEST_CODE 0x23                            // function code
@@ -43,6 +44,6 @@ int send_system_state(char state);
 int send_controller_mode(char mode);
 int send_working_status(char status);
 float send_room_temperature(float room_temperature);
-void check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out);
+short check_for_any_rx_bytes(int uart0_filestream, char type, void* p_out);
 
 #endif
