@@ -155,7 +155,7 @@ int handle_potentiometer_process(short is_csv_curve) {
     data.intern_temperature = internal_temperature;
     data.external_temperature = temperature;
     data.user_defined_temperature = reference_temperature;
-    data.resistor_active_percent = resistor_power;
+    data.resistor_active_percent = power;
     data.cooler_active_percent = cooler_power;
 
     struct tm *instant_data;
