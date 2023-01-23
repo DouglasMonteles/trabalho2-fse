@@ -32,7 +32,7 @@ void handle_terminal_process() {
 
   system("clear");
 
-  handle_potentiometer_process(IS_CSV_CURVE_FILE);
+  handle_potentiometer_process(2);
 }
 
 void handle_temperature_curve_process() {
@@ -117,7 +117,7 @@ int handle_potentiometer_process(short is_csv_curve) {
   float reference_temperature;
   
   do {
-    if (is_csv_curve == 1) { // csv curve
+    if (is_csv_curve == 1 ||is_csv_curve == 2) { // csv curve
       reference_temperature = get_reference_temperature();
     } else { // manual temperature
       reference_temperature = request_float_reference_temperature_message();
@@ -169,6 +169,7 @@ int handle_potentiometer_process(short is_csv_curve) {
     user_command = read_user_commands();
     handle_user_command(user_command);
     
+    if (is_csv_curve == 1) break;
   } while (user_command != 162 && user_command != 164); // desligar ou parar o forno
 
   return user_command;

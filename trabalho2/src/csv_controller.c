@@ -21,11 +21,11 @@ void register_system_logs_in_csv(logger_system_data data) {
 
   fprintf(log_csv_file, "%02d/%02d/%02d,", instant_data->tm_mday, (instant_data->tm_mon + 1), (instant_data->tm_year % 100 + 2000));
   fprintf(log_csv_file, "%02d:%02d:%02d,", instant_data->tm_hour, instant_data->tm_min, instant_data->tm_sec);
-  fprintf(log_csv_file, "%.2lf,", data.intern_temperature);
-  fprintf(log_csv_file, "%.2lf,", data.external_temperature);
-  fprintf(log_csv_file, "%.2lf,", data.user_defined_temperature);
-  fprintf(log_csv_file, "%.2lf,", data.resistor_active_percent);
-  fprintf(log_csv_file, "%.2lf,", data.cooler_active_percent);
+  fprintf(log_csv_file, "\"%.2lf\",", data.intern_temperature);
+  fprintf(log_csv_file, "\"%.2lf\",", data.external_temperature);
+  fprintf(log_csv_file, "\"%.2lf\",", data.user_defined_temperature);
+  fprintf(log_csv_file, "\"%.2lf\",", data.resistor_active_percent);
+  fprintf(log_csv_file, "\"%.2lf\"", data.cooler_active_percent);
   fprintf(log_csv_file, "\n");
   fclose(log_csv_file);
 }
