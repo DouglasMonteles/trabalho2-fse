@@ -38,6 +38,20 @@ make
 ./bin/main
 ```
 
+## Gráficos dos resultados
+
+### Temperatura de referência fixa 
+
+![Temperatura de referência fixa](assets/grafico%20temp%20referecia%20fixa%20(temperatura).png)
+
+![Temperatura de referência fixa - potência](assets/grafico%20temp%20referencia%20fica%20(potencia).png)
+
+### Seguindo uma curva pré-definida (curva_reflow.csv)
+
+![](assets/grafico%20curva%20csv%20(temperatura).png)
+
+![](assets/grafico%20curva%20csv%20(potencia).png)
+
 ## Apresentação
 
 Link: <https://youtu.be/t01jqrnWzoI>

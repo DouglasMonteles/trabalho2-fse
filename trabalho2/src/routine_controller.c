@@ -71,7 +71,7 @@ void handle_temperature_curve_process() {
     old_temperature = current_temperature;
     
     usleep(500000); // 0.5 seconds
-    current_second++;
+    current_second += 1;
 
     printf("Tempo: %d segundos\n", current_second);
 
